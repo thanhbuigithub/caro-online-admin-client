@@ -6,8 +6,8 @@ const cookieService = {
   get: function (key) {
     return cookies.get(key);
   },
-  set: function (key, value, options) {
-    cookies.set(key, value, options);
+  set: function (key, value) {
+    cookies.set(key, value);
   },
   remove: function (key) {
     cookies.remove(key);
