@@ -5,23 +5,25 @@ import PropTypes from 'prop-types';
 import {
   Button,
   ListItem,
-  makeStyles
+  makeStyles,
+  withStyles
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   item: {
     display: 'flex',
-    paddingTop: 0,
-    paddingBottom: 0
+    marginBottom: theme.spacing(1),
   },
   button: {
     color: theme.palette.text.secondary,
+    // margin:`-${theme.spacing(1)}`,
     fontWeight: theme.typography.fontWeightMedium,
     justifyContent: 'flex-start',
-    letterSpacing: 0,
     padding: '10px 8px',
-    textTransform: 'none',
-    width: '100%'
+    width: '100%',
+    '&:hover': {
+      border: 'none',
+    }
   },
   icon: {
     marginRight: theme.spacing(1)
@@ -30,15 +32,30 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 'auto'
   },
   active: {
-    color: theme.palette.primary.main,
+    color: '#9c27b0',
+    borderBottom: '2px solid #9c27b0',
     '& $title': {
       fontWeight: theme.typography.fontWeightMedium
     },
     '& $icon': {
-      color: theme.palette.primary.main
+      color: '#9c27b0',
     }
   }
 }));
+
+const StyledListItem = withStyles((theme) => ({
+  root: {
+    paddingTop: 0,
+    paddingBottom: 0,
+    "&:hover": {
+      borderRadius: '5px',
+      backgroundColor: '#00acc1',
+      "& .MuiButtonBase-root, & .MuiSvgIcon-root": {
+        color: theme.palette.common.white
+      }
+    }
+  }
+}))(ListItem);
 
 const NavItem = ({
   className,
@@ -50,7 +67,7 @@ const NavItem = ({
   const classes = useStyles();
 
   return (
-    <ListItem
+    <StyledListItem
       className={clsx(classes.item, className)}
       disableGutters
       {...rest}
@@ -71,7 +88,7 @@ const NavItem = ({
           {title}
         </span>
       </Button>
-    </ListItem>
+    </StyledListItem>
   );
 };
 

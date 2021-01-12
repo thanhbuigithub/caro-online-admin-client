@@ -110,17 +110,6 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           ))}
         </List>
       </Box>
-      <Box my={2} className={classes.button}>
-        <Button
-          onClick={() => { }}
-          color="primary"
-          fullWidth
-          size="large"
-          variant="contained"
-        >
-          Lịch sử trận đấu
-        </Button>
-      </Box>
     </Box>
   );
 

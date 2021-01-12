@@ -5,6 +5,8 @@ import userApi from "../api/userApi";
 
 export default (props) => {
   const [listUserOnline, setListUserOnline] = useState([]);
+  const [listUsers, setListUsers] = useState([]);
+  const [listUsersTemp, setListUsersTemp] = useState([]);
   const [user, setUser] = useState({
     _id: "",
     name: "",
@@ -16,11 +18,37 @@ export default (props) => {
   const [error, setError] = useState("");
   const [isUploadAvatar, setIsUploadAvatar] = useState(false);
   const [avatar, setAvatar] = useState(null);
+  const [isChanged, setIsChanged] = useState(false);
 
   const { _id, name, username, email, date, isAdmin } = user;
 
   const handleIsUploadAvatar = (value) => {
     setIsUploadAvatar(value);
+  };
+
+  const handleSetListUsers = (value) => {
+    setListUsers(value);
+    setListUsersTemp(value);
+  };
+  const handleIsChanged = (value) => {
+    setIsChanged(value)
+  }
+  const handleDisableAccess = (id) => {
+    try {
+      userApi.disableAccess(id);
+      setIsChanged(!isChanged);
+    } catch (err) {
+      console.log(err.response.data)
+    }
+  };
+
+  const handleEnableAccess = (id) => {
+    try {
+      userApi.enableAccess(id);
+      setIsChanged(!isChanged);
+    } catch (err) {
+      console.log(err.response.data)
+    }
   };
   const handleResetError = () => {
     setError("");
@@ -76,6 +104,11 @@ export default (props) => {
       // else setError(err.response.data);
     }
   };
+
+  const handleSearchText = (text) => {
+    const result = listUsers.filter(item => item.username.includes(text) || item.email.includes(text));
+    setListUsers(result);
+  }
   return (
     <UserContext.Provider
       value={{
@@ -85,6 +118,14 @@ export default (props) => {
         isUploadAvatar,
         _id,
         avatar,
+        listUsers,
+        isChanged,
+        listUsersTemp,
+        handleIsChanged,
+        handleSearchText,
+        handleDisableAccess,
+        handleEnableAccess,
+        handleSetListUsers,
         handleSaveAvatar,
         handleIsUploadAvatar,
         handleResetError,

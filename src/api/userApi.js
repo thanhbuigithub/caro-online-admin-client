@@ -72,6 +72,18 @@ const userApi = {
     const url = "/admin/active";
     return axiosClient.post(url, { token: token });
   },
+  getAllUsers: () => {
+    const url = "/admin/users";
+    return axiosClient.get(url);
+  },
+  disableAccess: (_id) => {
+    const url = "/admin/disable";
+    return axiosClient.put(url, { _id });
+  },
+  enableAccess: (_id) => {
+    const url = "/admin/enable";
+    return axiosClient.put(url, { _id });
+  }
 };
 
 export default userApi;

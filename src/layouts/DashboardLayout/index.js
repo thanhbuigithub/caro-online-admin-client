@@ -49,8 +49,11 @@ const DashboardLayout = () => {
     handleSaveUser,
     handleIsUploadAvatar,
     isUploadAvatar,
-    _id,
+    handleSetListUsers,
     avatar,
+    listUsers,
+    isChanged,
+    handleIsChanged,
     handleSaveAvatar,
     user,
   } = useContext(UserContext);
@@ -94,6 +97,32 @@ const DashboardLayout = () => {
       fetchAvatar();
     }
   });
+
+
+  useEffect(() => {
+    const getAllUsers = async () => {
+      try {
+        const fetchUsers = await userApi.getAllUsers();
+        handleSetListUsers(fetchUsers);
+      } catch (err) {
+        console.log('Error :', err.response);
+      }
+    };
+    getAllUsers();
+  }, []);
+
+  useEffect(() => {
+    const getAllUsers = async () => {
+      try {
+        const fetchUsersUpdate = await userApi.getAllUsers();
+        handleSetListUsers(fetchUsersUpdate);
+        console.log('2222222')
+      } catch (err) {
+        console.log('Error :', err.response);
+      }
+    };
+    getAllUsers();
+  }, [isChanged]);
 
   return (
     <div className={classes.root}>
