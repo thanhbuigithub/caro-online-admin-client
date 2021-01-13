@@ -1,11 +1,10 @@
 .board {
   background-color: #ffffff;
   border: 1px solid #999999;
-  height: calc(30px * 20 + 2px);
-  width: calc(30px * 20 + 2px);
+  height: calc(25px * 20 + 2px);
+  width: calc(25px * 20 + 2px);
   margin: auto;
   box-sizing: border-box;
-  position: relative;
 }
 
 .ready-modal {

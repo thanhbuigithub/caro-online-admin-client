@@ -3,23 +3,7 @@ import { useState } from "react";
 import "./index.css";
 import config from "../../../../../config/Config";
 
-function checkWinCell(winLine, row, col) {
-  if (winLine == null) {
-    return false;
-  }
-
-  for (let i = 0; i < winLine.length; i += 1) {
-    const curCell = winLine[i];
-    if (curCell.x === row && curCell.y === col) {
-      return true;
-    }
-  }
-  return false;
-}
-
 function Cell({ value, row, col }) {
-
-  const needToDisable = false;
 
 
   const chessAssetFromValue = (value) => {
@@ -35,6 +19,7 @@ function Cell({ value, row, col }) {
 
   return (
     <div
+      className={'cell'}
       row={row}
       col={col}
     >

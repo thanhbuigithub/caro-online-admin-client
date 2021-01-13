@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -10,6 +10,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import Config from "../../../../config/Config";
 import Cell from "./cell";
+import CellStep from "./cellStep";
 import "./index.css";
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import FastRewindIcon from '@material-ui/icons/FastRewind';
@@ -63,8 +64,16 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions);
 
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        height: '95vh',
+    }
+}));
+
+
 export default function CustomizedDialogs({ status, handleToggle }) {
-    let cellsDiv = [];
+    const cellsDiv = [];
+    const classes = useStyles();
     const board = Array(Config.boardSize.row)
         .fill(null)
         .map(() => {
@@ -77,56 +86,63 @@ export default function CustomizedDialogs({ status, handleToggle }) {
         }
     }
     return (
-        <Dialog onClose={handleToggle} aria-labelledby="customized-dialog-title" open={status}>
+        <Dialog
+            fullWidth
+            maxWidth='xl'
+            onClose={handleToggle}
+            className={classes.root}
+            aria-labelledby="customized-dialog-title" open={status}>
             <DialogTitle id="customized-dialog-title" onClose={handleToggle}>
-                <Box display="flex" justifyContent="flex-start">
-                    <Chip
-                        avatar={<Avatar src="/static/x.png" />}
-                        label="User 1"
-                        clickable
-                        color="primary"
-                        style={{ padding: '18px', fontSize: '20px' }}
-                    />
-                    <Chip label="Win" variant="outlined" style={{ marginLeft: '16px', marginRight: '16px', padding: '18px' }} />
-                    <Chip
-                        avatar={<Avatar src="/static/o.png" />}
-                        label="User 2"
-                        clickable
-                        style={{ padding: '18px', fontSize: '20px' }}
-                    />
-                </Box>
-                <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    style={{ width: '65%' }}
-                    mt={2}>
+                <Box display="flex" alignItems="center">
+                    <Box display="flex" justifyContent="center">
+                        <Chip
+                            avatar={<Avatar src="/static/x.png" />}
+                            label="User 1"
+                            clickable
+                            color="primary"
+                            style={{ padding: '18px', fontSize: '20px' }}
+                        />
+                        <Chip label="Win" variant="outlined" style={{ marginLeft: '16px', marginRight: '16px', padding: '18px' }} />
+                        <Chip
+                            avatar={<Avatar src="/static/o.png" />}
+                            label="User 2"
+                            clickable
+                            style={{ padding: '18px', fontSize: '20px' }}
+                        />
+                    </Box>
+                    <Box
+                        ml={3}
+                        display="flex"
+                        justifyContent="flex-start">
 
-                    <IconButton aria-label="delete">
-                        <FastRewindIcon fontSize="large" />
-                    </IconButton>
-                    <IconButton aria-label="delete">
-                        <PlayCircleFilledIcon fontSize="large" />
-                    </IconButton>
-                    <IconButton aria-label="delete">
-                        <FastForwardIcon fontSize="large" />
-                    </IconButton>
+                        <IconButton aria-label="delete">
+                            <FastRewindIcon fontSize="large" />
+                        </IconButton>
+                        <IconButton aria-label="delete">
+                            <PlayCircleFilledIcon fontSize="large" />
+                        </IconButton>
+                        <IconButton aria-label="delete">
+                            <FastForwardIcon fontSize="large" />
+                        </IconButton>
+                    </Box>
                 </Box>
+
             </DialogTitle>
             <DialogContent dividers>
                 <Container maxWidth={false}>
                     <Grid container spacing={3}>
-
+                        <Grid item lg={8} sm={8} xl={8} xs={12}>
+                            <div className="board">
+                                {cellsDiv}
+                            </div>
+                        </Grid>
+                        <Grid item lg={4} sm={4} xl={4} xs={12}>
+                            <CellStep size={17} />
+                        </Grid>
                     </Grid>
                 </Container>
-                <div className="board">
-                    {cellsDiv}
-                </div>
+
             </DialogContent>
-            <DialogActions>
-                <Button autoFocus onClick={handleToggle} color="primary">
-                    Save changes
-          </Button>
-            </DialogActions>
         </Dialog>
     );
 }
