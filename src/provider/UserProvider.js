@@ -33,21 +33,27 @@ export default (props) => {
   const handleIsChanged = (value) => {
     setIsChanged(value)
   }
-  const handleDisableAccess = (id) => {
+  const handleDisableAccess = async (id) => {
     try {
-      userApi.disableAccess(id);
+      const fetch = await userApi.disableAccess(id);
+      const index = listUsers.findIndex(item => item._id === fetch._id);
+      setListUsers(listUsers.splice(index, 1, fetch));
       setIsChanged(!isChanged);
-    } catch (err) {
-      console.log(err.response.data)
+      console.log('Disable')
+    } catch (error) {
+      console.log('ERROR Disable')
     }
   };
 
-  const handleEnableAccess = (id) => {
+  const handleEnableAccess = async (id) => {
     try {
-      userApi.enableAccess(id);
+      const fetch = await userApi.enableAccess(id);
+      const index = listUsers.findIndex(item => item._id === fetch._id);
+      setListUsers(listUsers.splice(index, 1, fetch));
       setIsChanged(!isChanged);
-    } catch (err) {
-      console.log(err.response.data)
+      console.log('Enable')
+    } catch (error) {
+      console.log('ERROR Enable')
     }
   };
   const handleResetError = () => {
@@ -121,6 +127,8 @@ export default (props) => {
         listUsers,
         isChanged,
         listUsersTemp,
+        setListUsers,
+        setListUsersTemp,
         handleIsChanged,
         handleSearchText,
         handleDisableAccess,

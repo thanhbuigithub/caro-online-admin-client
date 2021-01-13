@@ -74,7 +74,7 @@ const userApi = {
   },
   getAllUsers: () => {
     const url = "/admin/users";
-    return axiosClient.get(url);
+    return axiosClient.post(url);
   },
   disableAccess: (_id) => {
     const url = "/admin/disable";

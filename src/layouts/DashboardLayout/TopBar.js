@@ -95,7 +95,7 @@ const TopBar = ({ className, data, onMobileNavOpen, ...rest }) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  const { _id, user, handleSaveUser, handleSaveAvatar, isUploadAvatar, handleIsUploadAvatar, avatar } = useContext(
+  const { _id, user, listUsers, setListUsers, setListUsersTemp, handleSaveUser, handleSetListUsers, isUploadAvatar, handleIsUploadAvatar, avatar } = useContext(
     UserContext
   );
 
@@ -106,6 +106,32 @@ const TopBar = ({ className, data, onMobileNavOpen, ...rest }) => {
     setAnchorEl(null);
   };
 
+
+  useEffect(() => {
+    const getAllUsers = async () => {
+      try {
+        const fetchUsers = await userApi.getAllUsers();
+        handleSetListUsers(listUsers.splice(0, listUsers.length, ...fetchUsers));
+        console.log('Done fetching users')
+      } catch (err) {
+        console.log('Error :', err.response);
+      }
+    };
+    getAllUsers();
+  }, []);
+
+  useEffect(() => {
+    const getAllUsers = async () => {
+      try {
+        const fetchUsers = await userApi.getAllUsers();
+        handleSetListUsers(listUsers.splice(0, listUsers.length, ...fetchUsers));
+        console.log('Done fetching users again')
+      } catch (err) {
+        console.log('Error :', err.response);
+      }
+    };
+    getAllUsers();
+  }, [_id]);
 
   useEffect(() => {
     const getProfile = async () => {

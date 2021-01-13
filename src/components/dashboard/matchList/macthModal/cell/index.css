@@ -1,0 +1,13 @@
+.cell {
+  display: inline-block;
+  border: 1px solid #ddd;
+  margin: 0;
+  float: left;
+  width: 30px;
+  height: 30px;
+  box-sizing: border-box;
+}
+
+.winner-cell {
+  background-color: yellow;
+}

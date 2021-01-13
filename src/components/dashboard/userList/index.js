@@ -28,6 +28,7 @@ import SecondIcon from '../../../library/icon/SecondIcon';
 import ThirdIcon from '../../../library/icon/ThirdIcon';
 import UserContext from "../../../contexts/UserContext";
 import moment from 'moment';
+import userApi from "../../../api/userApi";
 import {
     Avatar,
     Box,
@@ -63,13 +64,24 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
+// const headCells = [
+//     { id: 'detail', numeric: false, label: 'Detail' },
+//     { id: 'name', numeric: false, label: 'User' },
+//     { id: 'rank', numeric: true, label: 'Rank' },
+//     { id: 'cup', numeric: true, label: 'Cup' },
+//     { id: 'match', numeric: true, label: 'Match' },
+//     { id: 'win', numeric: true, label: 'Win' },
+//     { id: 'active', numeric: null, label: 'Active' },
+//     { id: 'history', numeric: null, label: 'History' },
+// ];
+
 const headCells = [
     { id: 'detail', numeric: false, label: 'Detail' },
-    { id: 'name', numeric: false, label: 'User' },
+    { id: 'user', numeric: false, label: 'User' },
     { id: 'rank', numeric: true, label: 'Rank' },
-    { id: 'cup', numeric: true, label: 'Cup' },
-    { id: 'match', numeric: true, label: 'Match' },
-    { id: 'win', numeric: true, label: 'Win' },
+    { id: 'name', numeric: true, label: 'Name' },
+    { id: 'email', numeric: true, label: 'Email' },
+    { id: 'date', numeric: true, label: 'Date Join' },
     { id: 'active', numeric: null, label: 'Active' },
     { id: 'history', numeric: null, label: 'History' },
 ];
@@ -184,19 +196,32 @@ export default function EnhancedTable() {
     const [open, setOpen] = useState(false);
     const {
         listUsers,
+        isChanged,
         handleDisableAccess,
         handleEnableAccess,
-        isChanged,
         handleIsChanged,
+        setListUsers,
+        setListUsersTemp,
         handleSetListUsers
     } = useContext(UserContext);
-
+    
+//   useEffect(() => {
+//     const getAllUsers = async () => {
+//       try {
+//         const fetchUsersUpdate = await userApi.getAllUsers();
+//         handleSetListUsers(fetchUsersUpdate);
+//         console.log('Enable/Disable users');
+//       } catch (err) {
+//         console.log('Error :', err.response);
+//       }
+//       };
+//       getAllUsers();  
+//   },[isChanged]);
     
     useEffect(() => {
         setOpen(Array(listUsers.length).fill(false));
     }, [listUsers])
     
-
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -246,7 +271,7 @@ export default function EnhancedTable() {
                                             const dateText = ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear();
                                             const timeText = moment(date).format('HH:mm:ss');
                                             return (
-                                                <React.Fragment key={index}>
+                                                <React.Fragment key={row._id}>
                                                 <StyledTableRow
                                                         hover
                                                         key={row._id}
@@ -304,21 +329,18 @@ export default function EnhancedTable() {
 
                                                     </TableCell>
                                                     <TableCell align="right">
-                                                        {/* {row.cup} */}
-                                                        1
+                                                        {row.name}
                                                     </TableCell>
                                                     <TableCell align="right">
-                                                        {/* {row.match} */}
-                                                        2
+                                                        {row.email}
                                                     </TableCell>
-                                                    <TableCell align="right">
-                                                        {/* {row.win} */}
-                                                        3
+                                                    <TableCell align="right">                                                        
+                                                        {dateText}{ ','}{timeText}
                                                     </TableCell>
                                                     <TableCell align="center">
                                                         {!row.isActive ? <Button
-                                                            onClick={ () => {
-                                                            handleEnableAccess(row._id);
+                                                                onClick={() => {
+                                                                    handleEnableAccess(row._id);
                                                             }}
                                                             style={{ backgroundColor: '#388e3c', color: '#fff' }}
                                                             size="small"
@@ -326,7 +348,9 @@ export default function EnhancedTable() {
                                                         >
                                                             Enabled
                                                     </Button> : <Button
-                                                                onClick={()=>{handleDisableAccess(row._id)}}
+                                                                    onClick={() => {
+                                                                        handleDisableAccess(row._id);
+                                                                    }}
                                                                 style={{ backgroundColor: '#d32f2f', color: '#fff' }}
                                                                 size="small"
                                                                 variant="contained"
@@ -354,21 +378,28 @@ export default function EnhancedTable() {
                                                         <Table size="small" aria-label="purchases">
                                                         <TableHead>
                                                             <TableRow>
-                                                            <TableCell>Name</TableCell>
-                                                            <TableCell>Email</TableCell>
-                                                            <TableCell align="right">Date Join</TableCell>
-                                                            <TableCell align="right">Time Join</TableCell>
+                                                            <TableCell>Cup</TableCell>
+                                                            <TableCell>Match</TableCell>
+                                                            <TableCell align="right">Win</TableCell>
+                                                            <TableCell align="right">Percent Win</TableCell>
                                                             </TableRow>
                                                         </TableHead>
                                                         <TableBody>
                                                         <TableRow>
                                                                 <TableCell component="th" scope="row">
-                                                                {row.name}
+                                                                    {/* {row.cup} */}
+                                                                    1
                                                                 </TableCell>
-                                                                <TableCell>{row.email}</TableCell>
-                                                                                <TableCell align="right">{dateText}</TableCell>
+                                                                <TableCell>
+                                                                                    {/* {row.match} */}
+                                                                                    1
+                                                                </TableCell>
                                                                 <TableCell align="right">
-                                                                {timeText}
+                                                                                    {/* {row.win} */}
+                                                                                    1
+                                                                </TableCell>
+                                                                <TableCell align="right">
+                                                                1{' %'}
                                                                 </TableCell>
                                                             </TableRow>
                                                         </TableBody>
