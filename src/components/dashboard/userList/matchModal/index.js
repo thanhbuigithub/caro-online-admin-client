@@ -20,16 +20,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import PageTittle from "../../PageTittle";
+import PageTittle from "../../../PageTittle";
 import Container from "@material-ui/core/Container";
-import ToolbarCustom from './Toolbar';
-import FirstIcon from '../../../library/icon/FistIcon';
-import SecondIcon from '../../../library/icon/SecondIcon';
-import ThirdIcon from '../../../library/icon/ThirdIcon';
-import UserContext from "../../../contexts/UserContext";
+import UserContext from "../../../../contexts/UserContext";
 import moment from 'moment';
-import userApi from "../../../api/userApi";
-import MatchModal from "./macthModal/matchModal";
+import MatchModal from "../../matchList/macthModal/matchModal";
 import {
     Avatar,
     Box,
@@ -204,13 +199,12 @@ export default function EnhancedTable() {
     };
 
     return (
-        <PageTittle className={classes.root} title="Users">
+        <PageTittle className={classes.root} title="All Matchs">
             <Container maxWidth={false}>
                 <div className={classes.root}>
                     <MatchModal
                         status={openModal}
                         handleToggle={handleToggle} />
-                    <ToolbarCustom />
                     <Paper className={classes.paper}>
                         <TableContainer>
                             <Table

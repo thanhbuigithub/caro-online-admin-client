@@ -37,7 +37,7 @@ import {
 } from '@material-ui/core';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-
+import MatchModal from "./matchModal/allMatchModal";
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -79,6 +79,7 @@ const headCells = [
     { id: 'detail', numeric: false, label: 'Detail' },
     { id: 'user', numeric: false, label: 'User' },
     { id: 'rank', numeric: true, label: 'Rank' },
+    { id: 'elo', numeric: true, label: 'Elo' },
     { id: 'name', numeric: true, label: 'Name' },
     { id: 'email', numeric: true, label: 'Email' },
     { id: 'date', numeric: true, label: 'Date Join' },
@@ -189,11 +190,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EnhancedTable() {
     const classes = useStyles();
-    const [order, setOrder] = useState('asc');
-    const [orderBy, setOrderBy] = useState('rank');
+    const [order, setOrder] = useState('desc');
+    const [orderBy, setOrderBy] = useState('elo');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [open, setOpen] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
     const {
         listUsers,
         isChanged,
@@ -205,6 +207,13 @@ export default function EnhancedTable() {
         handleSetListUsers
     } = useContext(UserContext);
     
+    const handleClickPlayer = () => {
+        setOpenModal(true);
+    }
+    
+    const handleToggle = () => {
+        setOpenModal(false);
+    };
 //   useEffect(() => {
 //     const getAllUsers = async () => {
 //       try {
@@ -246,6 +255,9 @@ export default function EnhancedTable() {
         <PageTittle className={classes.root} title="Users">
             <Container maxWidth={false}>
                 <div className={classes.root}>
+                <MatchModal
+                        status={openModal}
+                        handleToggle={handleToggle} />
                     <ToolbarCustom />
                     <Paper className={classes.paper}>
                         <TableContainer>
@@ -321,12 +333,24 @@ export default function EnhancedTable() {
                                                             </Box>
                                                         </Box>
 
-                                                    </TableCell>
-                                                    <TableCell align="right">
-                                                        <Box display="flex" alignItems="center" justifyContent="flex-end">
-                                                            {row.rank === 1 ? <FirstIcon /> : row.rank === 2 ? <SecondIcon /> : row.rank === 3 ? <ThirdIcon /> : 1}
+                                                        </TableCell>
+                                                        {order === 'desc'?<TableCell align="right">
+                                                            <Box display="flex" alignItems="center" justifyContent="flex-end">
+                                                             
+                                                            {index === 0 ? <FirstIcon /> : index === 1 ? <SecondIcon /> : index === 2 ? <ThirdIcon /> : index+1}
+                                                            
                                                         </Box>
-
+                                                        </TableCell>:<TableCell align="right">
+                                                            <Box display="flex" alignItems="center" justifyContent="flex-end">
+                                                            {index === listUsers.length-1 ? <FirstIcon /> : index === listUsers.length-2 ? <SecondIcon /> : index === listUsers.length-3 ? <ThirdIcon /> : listUsers.length -index}
+                                                            
+                                                        </Box>
+                                                        </TableCell>}
+                                                    
+                                                        <TableCell align="right">
+                                                        <Box display="flex" alignItems="center" justifyContent="flex-end">
+                                                                {row.elo}
+                                                        </Box>
                                                     </TableCell>
                                                     <TableCell align="right">
                                                         {row.name}
@@ -362,7 +386,7 @@ export default function EnhancedTable() {
                                                     </TableCell>
                                                     <TableCell align="center">
                                                         <Button
-                                                            onClick={() => { }}
+                                                            onClick={handleClickPlayer}
                                                             color="primary"
                                                             size="small"
                                                             variant="contained"
@@ -378,7 +402,6 @@ export default function EnhancedTable() {
                                                         <Table size="small" aria-label="purchases">
                                                         <TableHead>
                                                             <TableRow>
-                                                            <TableCell>Cup</TableCell>
                                                             <TableCell>Match</TableCell>
                                                             <TableCell align="right">Win</TableCell>
                                                             <TableCell align="right">Percent Win</TableCell>
@@ -386,20 +409,15 @@ export default function EnhancedTable() {
                                                         </TableHead>
                                                         <TableBody>
                                                         <TableRow>
-                                                                <TableCell component="th" scope="row">
-                                                                    {/* {row.cup} */}
-                                                                    1
-                                                                </TableCell>
                                                                 <TableCell>
-                                                                                    {/* {row.match} */}
-                                                                                    1
+                                                                                    {row.numOfMatches}
                                                                 </TableCell>
                                                                 <TableCell align="right">
-                                                                                    {/* {row.win} */}
-                                                                                    1
+                                                                                    {row.winMatches}
                                                                 </TableCell>
                                                                 <TableCell align="right">
-                                                                1{' %'}
+                                                                    {row.numOfMatches>0?Math.round((row.winMatches / row.numOfMatches) * 100, 2):0}{' %'}
+                                                                                    
                                                                 </TableCell>
                                                             </TableRow>
                                                         </TableBody>
