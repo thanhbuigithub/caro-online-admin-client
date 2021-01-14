@@ -85,7 +85,7 @@ const userApi = {
     return axiosClient.put(url, { _id });
   },
   getAllGamesOfUser: (userId) => {
-    const url = "/user/games";
+    const url = "/admin/games";
     return axiosClient.post(url, { userId });
   },
 };
