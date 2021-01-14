@@ -62,7 +62,7 @@ const DialogActions = withStyles((theme) => ({
 
 
 
-export default function CustomizedDialogs({ status, handleToggle }) {
+export default function CustomizedDialogs({ status, handleToggle, idUser }) {
     return (
         <Dialog
             fullWidth
@@ -70,13 +70,13 @@ export default function CustomizedDialogs({ status, handleToggle }) {
             onClose={handleToggle}
             aria-labelledby="customized-dialog-title" open={status}>
             <DialogTitle id="customized-dialog-title" onClose={handleToggle}>
-                111
+                Lịch sử
             </DialogTitle>
             <DialogContent dividers>
                 <Container maxWidth={false}>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
-                            <ListMatch />
+                            <ListMatch idUser={idUser} />
                         </Grid>
                     </Grid>
                 </Container>

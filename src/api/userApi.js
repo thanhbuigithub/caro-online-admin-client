@@ -83,7 +83,11 @@ const userApi = {
   enableAccess: (_id) => {
     const url = "/admin/enable";
     return axiosClient.put(url, { _id });
-  }
+  },
+  getAllGamesOfUser: (userId) => {
+    const url = "/user/games";
+    return axiosClient.post(url, { userId });
+  },
 };
 
 export default userApi;

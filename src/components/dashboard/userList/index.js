@@ -114,7 +114,7 @@ function EnhancedTableHead(props) {
                         sortDirection={orderBy === headCell.id ? order : false}
                         style={{ fontSize: '17px' }}
                     >
-                        {index === 5 || index === 6 ? headCell.label : <TableSortLabel
+                        {index === 7 || index === 8 ? headCell.label : <TableSortLabel
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
@@ -196,6 +196,7 @@ export default function EnhancedTable() {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [open, setOpen] = useState(false);
     const [openModal, setOpenModal] = useState(false);
+    const [idUser, setIdUser] = useState(null);
     const {
         listUsers,
         isChanged,
@@ -207,7 +208,8 @@ export default function EnhancedTable() {
         handleSetListUsers
     } = useContext(UserContext);
     
-    const handleClickPlayer = () => {
+    const handleClickPlayer = (id) => {
+        setIdUser(id);
         setOpenModal(true);
     }
     
@@ -255,7 +257,8 @@ export default function EnhancedTable() {
         <PageTittle className={classes.root} title="Users">
             <Container maxWidth={false}>
                 <div className={classes.root}>
-                <MatchModal
+                    <MatchModal
+                        idUser={idUser}
                         status={openModal}
                         handleToggle={handleToggle} />
                     <ToolbarCustom />
@@ -386,7 +389,7 @@ export default function EnhancedTable() {
                                                     </TableCell>
                                                     <TableCell align="center">
                                                         <Button
-                                                            onClick={handleClickPlayer}
+                                                            onClick={()=>{handleClickPlayer(row._id)}}
                                                             color="primary"
                                                             size="small"
                                                             variant="contained"
