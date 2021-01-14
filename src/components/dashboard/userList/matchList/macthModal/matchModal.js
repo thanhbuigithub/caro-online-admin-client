@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -13,9 +13,11 @@ import Cell from "./cell";
 import CellStep from "./cellStep";
 import "./index.css";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
+import PauseCircleFilledIcon from "@material-ui/icons/PauseCircleFilled";
 import FastRewindIcon from "@material-ui/icons/FastRewind";
 import FastForwardIcon from "@material-ui/icons/FastForward";
 import { Avatar, Box, Chip, Container, Grid } from "@material-ui/core";
+import Chat from "./chat";
 
 const styles = (theme) => ({
   root: {
@@ -65,6 +67,11 @@ const useStyles = makeStyles((theme) => ({
   root: {
     height: "95vh",
   },
+  cellStep: {
+    height: "250px",
+    overflow: "auto",
+    marginBottom: "20px",
+  },
 }));
 
 export default function CustomizedDialogs({
@@ -74,16 +81,25 @@ export default function CustomizedDialogs({
   gameIndex,
 }) {
   const [currentMove, setCurrentMove] = useState(0);
+  const [play, setPlay] = useState(false);
+  let playInterval = null;
   const classes = useStyles();
   const game = listGame[gameIndex];
   let history = [];
   let winner = null;
   let winLine = [];
+  let chatHistory = [];
   if (game) {
     history = game.history;
     winner = game.winner;
     winLine = game.winLine;
+    chatHistory = game.chatHistory;
   }
+
+  const handleToggleClose = () => {
+    handleToggle();
+    setCurrentMove(0);
+  };
 
   function checkWinCell(winLine, row, col) {
     if (winLine == null) {
@@ -141,26 +157,45 @@ export default function CustomizedDialogs({
     if (currentMove > 0) {
       setCurrentMove(currentMove - 1);
     }
+    setPlay(false);
   };
 
   const next = () => {
     if (currentMove < history.length - 1) {
       setCurrentMove(currentMove + 1);
     }
+    setPlay(false);
   };
 
-  const play = () => { };
+  const playMatch = () => {
+    setPlay(true);
+  };
+
+  const stopMatch = () => {
+    setPlay(false);
+  };
+
+  useEffect(() => {
+    playInterval = setInterval(() => {
+      if (play && currentMove < history.length - 1) {
+        setCurrentMove(currentMove + 1);
+      }
+    }, 2000);
+    return () => {
+      clearInterval(playInterval);
+    };
+  }, [playInterval, currentMove, play]);
 
   return (
     <Dialog
       fullWidth
       maxWidth="xl"
-      onClose={handleToggle}
+      onClose={handleToggleClose}
       className={classes.root}
       aria-labelledby="customized-dialog-title"
       open={status}
     >
-      <DialogTitle id="customized-dialog-title" onClose={handleToggle}>
+      <DialogTitle id="customized-dialog-title" onClose={handleToggleClose}>
         <Box display="flex" alignItems="center">
           <Box display="flex" justifyContent="center">
             <Chip
@@ -190,9 +225,15 @@ export default function CustomizedDialogs({
             <IconButton aria-label="delete" onClick={prev}>
               <FastRewindIcon fontSize="large" />
             </IconButton>
-            <IconButton aria-label="delete" onClick={play}>
-              <PlayCircleFilledIcon fontSize="large" />
-            </IconButton>
+            {play ? (
+              <IconButton aria-label="delete" onClick={stopMatch}>
+                <PauseCircleFilledIcon fontSize="large" />
+              </IconButton>
+            ) : (
+              <IconButton aria-label="delete" onClick={playMatch}>
+                <PlayCircleFilledIcon fontSize="large" />
+              </IconButton>
+            )}
             <IconButton aria-label="delete" onClick={next}>
               <FastForwardIcon fontSize="large" />
             </IconButton>
@@ -206,11 +247,16 @@ export default function CustomizedDialogs({
               <div className="board">{getCellDiv(currentMove)}</div>
             </Grid>
             <Grid item lg={4} sm={4} xl={4} xs={12}>
-              <CellStep
-                size={history.length}
-                setCurrentMove={setCurrentMove}
-                currentMove={currentMove}
-              />
+              <Grid item className={classes.cellStep}>
+                <CellStep
+                  size={history.length}
+                  setCurrentMove={setCurrentMove}
+                  currentMove={currentMove}
+                />
+              </Grid>
+              <Grid item className={classes.history}>
+                <Chat chatHistory={chatHistory} />
+              </Grid>
             </Grid>
           </Grid>
         </Container>

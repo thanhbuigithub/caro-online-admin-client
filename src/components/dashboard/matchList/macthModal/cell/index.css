@@ -11,3 +11,17 @@
 .winner-cell {
   background-color: yellow;
 }
+
+.cell img {
+  width: 22px;
+  height: 22px;
+  transition: 0.3s;
+}
+
+.cell:hover {
+  background-color: lightgray;
+}
+
+.prev-move {
+  background-color: yellow;
+}

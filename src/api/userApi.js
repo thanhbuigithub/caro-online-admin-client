@@ -49,7 +49,7 @@ const userApi = {
     const url = `/admin/change_password`;
     return axiosClient.put(url, {
       oldPassword: oldPassword,
-      newPassword: newPassword
+      newPassword: newPassword,
     });
   },
 
@@ -87,6 +87,10 @@ const userApi = {
   getAllGamesOfUser: (userId) => {
     const url = "/admin/games";
     return axiosClient.post(url, { userId });
+  },
+  getAllGames: () => {
+    const url = "/admin/games";
+    return axiosClient.get(url);
   },
 };
 

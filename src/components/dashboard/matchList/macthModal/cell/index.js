@@ -3,15 +3,13 @@ import { useState } from "react";
 import "./index.css";
 import config from "../../../../../config/Config";
 
-function Cell({ value, row, col }) {
-
-
+function Cell({ value, row, col, isWinnerCell, isCurrentCell }) {
   const chessAssetFromValue = (value) => {
     switch (value) {
       case config.playerX:
-        return "X";
+        return "/x.png";
       case config.playerO:
-        return "O";
+        return "/o.png";
       default:
         return "";
     }
@@ -19,11 +17,15 @@ function Cell({ value, row, col }) {
 
   return (
     <div
-      className={'cell'}
+      className={`cell ${isWinnerCell ? "winner-cell" : ""} ${
+        isCurrentCell ? "prev-move" : ""
+      }`}
       row={row}
       col={col}
     >
-      {chessAssetFromValue(value)}
+      {chessAssetFromValue(value) === "" ? null : (
+        <img src={chessAssetFromValue(value)}></img>
+      )}
     </div>
   );
 }
